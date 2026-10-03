@@ -17,4 +17,13 @@ public class SpaceRepository {
     public List<Space> getAllSpaces() {
         return new ArrayList<>(spaces);
     }
+
+public Space findSpaceByName(String name) {
+    for (Space space : spaces) {
+        if (space.getName().equalsIgnoreCase(name)) {
+            return space;
+        }
+    }
+    return null;
 }
+       }
