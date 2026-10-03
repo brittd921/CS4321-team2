@@ -26,4 +26,13 @@ public class SpaceRepository {
         }
         return result;
     }
+
+public Space findSpaceByName(String name) {
+    for (Space space : spaces) {
+        if (space.getName().equalsIgnoreCase(name)) {
+            return space;
+        }
+    }
+    return null;
 }
+       }

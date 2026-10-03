@@ -32,4 +32,20 @@ public class SpaceView {
             );
         }
     }
+
+    public void displaySpaceDetails(String name) {
+        Space space = controller.getSpaceDetails(name);
+
+        if (space == null) {
+            System.out.println("Space not found.");
+            return;
+        }
+
+        System.out.println("Space Details");
+        System.out.println("-------------");
+        System.out.println("Name: " + space.getName());
+        System.out.println("Building: " + space.getBuilding());
+        System.out.println("Capacity: " + space.getCapacity());
+        System.out.println("Description: " + space.getDescription());
+    }
 }
