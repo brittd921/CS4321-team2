@@ -31,14 +31,36 @@ public class SpaceViewTest {
                 )
         );
 
+        repository.addSpace(
+                new Space(
+                        "S003",
+                        "Conference Room",
+                        "Student Center",
+                        50,
+                        "Meeting and presentation space"
+                )
+        );
+
         SpaceController controller = new SpaceController(repository);
         SpaceView view = new SpaceView(controller);
 
+        // US-1
         System.out.println("US-1 TEST");
         view.displayAllSpaces();
 
+        // US-2
         System.out.println();
         System.out.println("US-2 TEST");
         view.displaySpaceDetails("Library");
+
+        // US-3 - Matching spaces
+        System.out.println();
+        System.out.println("US-3 TEST - MATCHING SPACES");
+        view.displaySpacesByCapacity(50);
+
+        // US-3 - No matching spaces
+        System.out.println();
+        System.out.println("US-3 TEST - NO MATCHING SPACES");
+        view.displaySpacesByCapacity(200);
     }
 }
