@@ -9,6 +9,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class SpaceControllerTest {
 
@@ -18,11 +19,19 @@ public class SpaceControllerTest {
         SpaceRepository repository = new SpaceRepository();
 
         repository.addSpace(
-                new Space("Library", "Main Building", 100)
+                new Space(
+                        "Library",
+                        "Main Building",
+                        100
+                )
         );
 
         repository.addSpace(
-                new Space("Computer Lab", "Science Building", 30)
+                new Space(
+                        "Computer Lab",
+                        "Science Building",
+                        30
+                )
         );
 
         SpaceController controller = new SpaceController(repository);
@@ -62,5 +71,27 @@ public class SpaceControllerTest {
                 "Large study and meeting space",
                 result.getDescription()
         );
+    }
+
+    // US-2: Test when the requested space does not exist
+    @Test
+    void getSpaceDetailsReturnsNullWhenSpaceIsNotFound() {
+        SpaceRepository repository = new SpaceRepository();
+
+        repository.addSpace(
+                new Space(
+                        "S001",
+                        "Library",
+                        "Main Building",
+                        100,
+                        "Large study and meeting space"
+                )
+        );
+
+        SpaceController controller = new SpaceController(repository);
+
+        Space result = controller.getSpaceDetails("Gym");
+
+        assertNull(result);
     }
 }
