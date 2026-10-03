@@ -52,7 +52,7 @@ public class SpaceControllerTest {
 
         SpaceController controller = new SpaceController(repository);
 
-        Space result = controller.getSpaceDetails("S001");
+        Space result = controller.getSpaceDetails("Library");
 
         assertEquals("S001", result.getId());
         assertEquals("Library", result.getName());
