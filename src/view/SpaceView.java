@@ -13,6 +13,7 @@ public class SpaceView {
         this.controller = controller;
     }
 
+    // US-1: Display all spaces
     public void displayAllSpaces() {
         List<Space> spaces = controller.getAllSpaces();
 
@@ -33,6 +34,7 @@ public class SpaceView {
         }
     }
 
+    // US-2: Display details for a selected space
     public void displaySpaceDetails(String name) {
         Space space = controller.getSpaceDetails(name);
 
@@ -47,5 +49,34 @@ public class SpaceView {
         System.out.println("Building: " + space.getBuilding());
         System.out.println("Capacity: " + space.getCapacity());
         System.out.println("Description: " + space.getDescription());
+    }
+
+    // US-3: Display spaces that meet a minimum capacity
+    public void displaySpacesByCapacity(int minCapacity) {
+        List<Space> spaces = controller.getSpacesByCapacity(minCapacity);
+
+        if (spaces.isEmpty()) {
+            System.out.println(
+                    "No spaces found with a capacity of "
+                            + minCapacity
+                            + " or more."
+            );
+            return;
+        }
+
+        System.out.println(
+                "Spaces with capacity of "
+                        + minCapacity
+                        + " or more"
+        );
+        System.out.println("--------------------------------");
+
+        for (Space space : spaces) {
+            System.out.println(
+                    "Name: " + space.getName()
+                            + " | Building: " + space.getBuilding()
+                            + " | Capacity: " + space.getCapacity()
+            );
+        }
     }
 }
