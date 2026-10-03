@@ -65,7 +65,7 @@ public class SpaceRepositoryTest {
         );
     }
 
-    // US-2: Test when the requested space does not exist
+    // US-2: Test when requested space does not exist
     @Test
     public void testFindSpaceByNameReturnsNullWhenNotFound() {
         SpaceRepository repository = new SpaceRepository();
@@ -83,5 +83,72 @@ public class SpaceRepositoryTest {
         Space result = repository.findSpaceByName("Gym");
 
         assertNull(result);
+    }
+
+    // US-3: Test filtering spaces by minimum capacity
+    @Test
+    public void findSpacesByCapacityReturnsMatchingSpaces() {
+        SpaceRepository repository = new SpaceRepository();
+
+        repository.addSpace(
+                new Space(
+                        "Library",
+                        "Main Building",
+                        100
+                )
+        );
+
+        repository.addSpace(
+                new Space(
+                        "Computer Lab",
+                        "Science Building",
+                        30
+                )
+        );
+
+        repository.addSpace(
+                new Space(
+                        "Conference Room",
+                        "Student Center",
+                        50
+                )
+        );
+
+        List<Space> spaces =
+                repository.findSpacesByCapacity(50);
+
+        assertEquals(2, spaces.size());
+        assertEquals("Library", spaces.get(0).getName());
+        assertEquals(
+                "Conference Room",
+                spaces.get(1).getName()
+        );
+    }
+
+    // US-3: Test when no spaces meet minimum capacity
+    @Test
+    public void findSpacesByCapacityReturnsEmptyListWhenNoSpacesMatch() {
+        SpaceRepository repository = new SpaceRepository();
+
+        repository.addSpace(
+                new Space(
+                        "Library",
+                        "Main Building",
+                        100
+                )
+        );
+
+        repository.addSpace(
+                new Space(
+                        "Computer Lab",
+                        "Science Building",
+                        30
+                )
+        );
+
+        List<Space> spaces =
+                repository.findSpacesByCapacity(200);
+
+        assertTrue(spaces.isEmpty());
     }
 }
