@@ -17,6 +17,15 @@ public class SpaceRepository {
     public List<Space> getAllSpaces() {
         return new ArrayList<>(spaces);
     }
+    public List<Space> findSpacesByCapacity(int minCapacity) {
+        List<Space> result = new ArrayList<>();
+        for (Space space : spaces) {
+            if (space.getCapacity() >= minCapacity) {
+                result.add(space);
+            }
+        }
+        return result;
+    }
 
 public Space findSpaceByName(String name) {
     for (Space space : spaces) {
