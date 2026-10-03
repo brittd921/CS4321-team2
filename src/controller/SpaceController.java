@@ -20,4 +20,8 @@ public class SpaceController {
     public Space getSpaceDetails(String name) {
         return repository.findSpaceByName(name);
     }
+
+    public List<Space> getSpacesByCapacity(int minCapacity) {
+        return repository.findSpacesByCapacity(minCapacity);
+    }
 }

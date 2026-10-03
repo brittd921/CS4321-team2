@@ -94,4 +94,42 @@ public class SpaceControllerTest {
 
         assertNull(result);
     }
+
+    // US-3: Test filtering spaces by minimum capacity
+    @Test
+    void getSpacesByCapacityReturnsMatchingSpaces() {
+        SpaceRepository repository = new SpaceRepository();
+
+        repository.addSpace(
+                new Space(
+                        "Library",
+                        "Main Building",
+                        100
+                )
+        );
+
+        repository.addSpace(
+                new Space(
+                        "Computer Lab",
+                        "Science Building",
+                        30
+                )
+        );
+
+        repository.addSpace(
+                new Space(
+                        "Conference Room",
+                        "Student Center",
+                        50
+                )
+        );
+
+        SpaceController controller = new SpaceController(repository);
+
+        List<Space> spaces = controller.getSpacesByCapacity(50);
+
+        assertEquals(2, spaces.size());
+        assertEquals("Library", spaces.get(0).getName());
+        assertEquals("Conference Room", spaces.get(1).getName());
+    }
 }
