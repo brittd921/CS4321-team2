@@ -16,4 +16,8 @@ public class SpaceController {
     public List<Space> getAllSpaces() {
         return repository.getAllSpaces();
     }
+
+    public Space getSpaceDetails(String id) {
+        return repository.getSpaceById(id);
+    }
 }
