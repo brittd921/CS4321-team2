@@ -1,8 +1,12 @@
 package view;
 
 import controller.SpaceController;
+import model.Reservation;
 import model.Space;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 
 public class SpaceView {
@@ -76,6 +80,35 @@ public class SpaceView {
                     "Name: " + space.getName()
                             + " | Building: " + space.getBuilding()
                             + " | Capacity: " + space.getCapacity()
+            );
+        }
+    }
+
+    public void displayAvailability(
+            Space space,
+            LocalDate date,
+            List<Reservation> reservations
+    ) {
+        System.out.println("Availability for " + space.getName());
+        System.out.println("Date: " + date);
+
+        if (reservations.isEmpty()) {
+            System.out.println("This space is fully available for the selected date.");
+            return;
+        }
+
+        reservations.sort(Comparator.comparing(Reservation::getStartTime));
+
+        DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("h:mm a");
+
+        System.out.println("Reservations");
+        System.out.println("------------");
+
+        for (Reservation reservation : reservations) {
+            System.out.println(
+                    reservation.getStartTime().format(timeFormat)
+                            + " - "
+                            + reservation.getEndTime().format(timeFormat)
             );
         }
     }
