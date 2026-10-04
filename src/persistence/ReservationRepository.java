@@ -15,15 +15,38 @@ public class ReservationRepository {
         reservations.add(reservation);
     }
 
-    public List<Reservation> findReservationsBySpaceAndDate(String spaceName, LocalDate date) {
+    // US-4: Find reservations for a selected space and date
+    public List<Reservation> findReservationsBySpaceAndDate(
+            String spaceName,
+            LocalDate date
+    ) {
         List<Reservation> result = new ArrayList<>();
+
         for (Reservation reservation : reservations) {
             if (reservation.getSpace().getName().equalsIgnoreCase(spaceName)
                     && reservation.getDate().equals(date)) {
                 result.add(reservation);
             }
         }
-        result.sort(Comparator.comparing(Reservation::getStartTime));
+
+        result.sort(
+                Comparator.comparing(Reservation::getStartTime)
+        );
+
+        return result;
+    }
+
+    // US-7: Retrieve all reservations sorted by date and start time
+    public List<Reservation> getAllReservations() {
+
+        List<Reservation> result =
+                new ArrayList<>(reservations);
+
+        result.sort(
+                Comparator.comparing(Reservation::getDate)
+                        .thenComparing(Reservation::getStartTime)
+        );
+
         return result;
     }
 }
