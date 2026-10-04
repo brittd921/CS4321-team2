@@ -3,6 +3,7 @@ package persistence;
 import model.Reservation;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -48,5 +49,28 @@ public class ReservationRepository {
         );
 
         return result;
+    }
+    public boolean updateReservation(
+            Reservation reservation,
+            LocalDate newDate,
+            LocalTime newStartTime,
+            LocalTime newEndTime
+    ) {
+        int index = reservations.indexOf(reservation);
+
+        if (index == -1) {
+            return false;
+        }
+
+        Reservation updatedReservation = new Reservation(
+                reservation.getSpace(),
+                newDate,
+                newStartTime,
+                newEndTime
+        );
+
+        reservations.set(index, updatedReservation);
+
+        return true;
     }
 }
