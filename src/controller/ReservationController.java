@@ -23,6 +23,7 @@ public class ReservationController {
         return repository.findReservationsBySpaceAndDate(spaceName, date);
     }
 
+    // US-5: Determine whether a time period is reserved
     public boolean isTimeReserved(
             String spaceName,
             LocalDate date,
@@ -42,12 +43,18 @@ public class ReservationController {
         return false;
     }
 
+    // US-5: Determine whether a time period is available
     public boolean isTimeAvailable(
             String spaceName,
             LocalDate date,
             LocalTime startTime,
             LocalTime endTime
     ) {
-        return !isTimeReserved(spaceName, date, startTime, endTime);
+        return !isTimeReserved(
+                spaceName,
+                date,
+                startTime,
+                endTime
+        );
     }
 }
