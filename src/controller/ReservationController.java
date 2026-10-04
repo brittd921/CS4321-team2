@@ -118,4 +118,25 @@ public class ReservationController {
 
         return "VALID";
     }
+
+    public String createReservation(
+            Space space,
+            LocalDate date,
+            LocalTime startTime,
+            LocalTime endTime
+    ) {
+        String validationResult =
+                validateReservation(space, date, startTime, endTime);
+
+        if (!validationResult.equals("VALID")) {
+            return validationResult;
+        }
+
+        Reservation reservation =
+                new Reservation(space, date, startTime, endTime);
+
+        repository.addReservation(reservation);
+
+        return "Reservation created successfully.";
+    }
 }

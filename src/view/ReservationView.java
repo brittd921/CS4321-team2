@@ -1,6 +1,7 @@
 package view;
 
 import controller.ReservationController;
+import model.Space;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -59,5 +60,21 @@ public class ReservationView {
 
             start = end;
         }
+    }
+
+    public void createReservation(
+            Space space,
+            LocalDate date,
+            LocalTime startTime,
+            LocalTime endTime
+    ) {
+        String result = controller.createReservation(
+                space,
+                date,
+                startTime,
+                endTime
+        );
+
+        System.out.println(result);
     }
 }
