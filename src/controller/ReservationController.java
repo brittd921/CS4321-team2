@@ -143,5 +143,85 @@ public class ReservationController {
     // US-7: Retrieve all reservations
     public List<Reservation> getAllReservations() {
         return repository.getAllReservations();
+
+    }
+
+    // US-8: Check for conflicts while ignoring the reservation being modified
+    public boolean hasReservationConflictExceptCurrent(
+            Reservation currentReservation,
+            LocalDate newDate,
+            LocalTime newStartTime,
+            LocalTime newEndTime
+    ) {
+        List<Reservation> reservations =
+                repository.findReservationsBySpaceAndDate(
+                        currentReservation.getSpace().getName(),
+                        newDate
+                );
+
+        for (Reservation reservation : reservations) {
+
+            // Ignore the reservation currently being modified
+            if (reservation == currentReservation) {
+                continue;
+            }
+
+            if (newStartTime.isBefore(reservation.getEndTime())
+                    && newEndTime.isAfter(reservation.getStartTime())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // US-8: Modify an existing reservation
+    public String modifyReservation(
+            Reservation reservation,
+            LocalDate newDate,
+            LocalTime newStartTime,
+            LocalTime newEndTime
+    ) {
+
+        if (reservation == null
+                || newDate == null
+                || newStartTime == null
+                || newEndTime == null) {
+            return "Missing required reservation information.";
+        }
+
+        if (!newEndTime.isAfter(newStartTime)) {
+            return "End time must be after start time.";
+        }
+
+        LocalDateTime newReservationStart =
+                LocalDateTime.of(newDate, newStartTime);
+
+        if (newReservationStart.isBefore(LocalDateTime.now())) {
+            return "Reservation date and time cannot be in the past.";
+        }
+
+        if (hasReservationConflictExceptCurrent(
+                reservation,
+                newDate,
+                newStartTime,
+                newEndTime
+        )) {
+            return "Reservation conflicts with an existing reservation.";
+        }
+
+        boolean updated =
+                repository.updateReservation(
+                        reservation,
+                        newDate,
+                        newStartTime,
+                        newEndTime
+                );
+
+        if (!updated) {
+            return "Reservation could not be found.";
+        }
+
+        return "Reservation updated successfully.";
     }
 }
