@@ -1,9 +1,11 @@
 package controller;
 
 import model.Reservation;
+import model.Space;
 import persistence.ReservationRepository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -56,5 +58,37 @@ public class ReservationController {
                 startTime,
                 endTime
         );
+    }
+
+    // US-6: Validate reservation information
+    public String validateReservation(
+            Space space,
+            LocalDate date,
+            LocalTime startTime,
+            LocalTime endTime
+    ) {
+
+        // Required information must be present
+        if (space == null
+                || date == null
+                || startTime == null
+                || endTime == null) {
+            return "Missing required reservation information.";
+        }
+
+        // End time must be after start time
+        if (!endTime.isAfter(startTime)) {
+            return "End time must be after start time.";
+        }
+
+        // Reservation cannot be in the past
+        LocalDateTime reservationStart =
+                LocalDateTime.of(date, startTime);
+
+        if (reservationStart.isBefore(LocalDateTime.now())) {
+            return "Reservation date and time cannot be in the past.";
+        }
+
+        return "VALID";
     }
 }
