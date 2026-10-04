@@ -139,4 +139,9 @@ public class ReservationController {
 
         return "Reservation created successfully.";
     }
+
+    // US-7: Retrieve all reservations
+    public List<Reservation> getAllReservations() {
+        return repository.getAllReservations();
+    }
 }
