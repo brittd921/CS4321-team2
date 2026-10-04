@@ -116,4 +116,22 @@ public class ReservationView {
             );
         }
     }
+    // US-8: Modify a reservation and display the result
+    public void modifyReservation(
+            Reservation reservation,
+            LocalDate newDate,
+            LocalTime newStartTime,
+            LocalTime newEndTime
+    ) {
+
+        String result =
+                controller.modifyReservation(
+                        reservation,
+                        newDate,
+                        newStartTime,
+                        newEndTime
+                );
+
+        System.out.println(result);
+    }
 }
