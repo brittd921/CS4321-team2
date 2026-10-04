@@ -16,7 +16,7 @@ public class CreateReservationControllerTest {
         ReservationRepository repository = new ReservationRepository();
         ReservationController controller = new ReservationController(repository);
 
-        Space space = new Space(
+        Space space1 = new Space(
                 "S001",
                 "Library",
                 "Main Building",
@@ -24,47 +24,94 @@ public class CreateReservationControllerTest {
                 "Large study and meeting space"
         );
 
-        LocalDate date = LocalDate.now().plusDays(1);
+        Space space2 = new Space(
+                "S002",
+                "Computer Lab",
+                "Technology Building",
+                30,
+                "Computer lab"
+        );
 
-        String validResult = controller.createReservation(
-                space,
+        LocalDate date = LocalDate.now().plusDays(1);
+        LocalDate otherDate = LocalDate.now().plusDays(2);
+        LocalDate pastDate = LocalDate.now().minusDays(1);
+
+        String valid = controller.createReservation(
+                space1,
                 date,
                 LocalTime.of(10, 0),
                 LocalTime.of(11, 0)
         );
 
-        List<Reservation> reservations =
-                controller.getReservationsByDay("Library", date);
-
-        String conflictResult = controller.createReservation(
-                space,
+        String overlap = controller.createReservation(
+                space1,
                 date,
                 LocalTime.of(10, 30),
                 LocalTime.of(11, 30)
         );
 
-        String backToBackResult = controller.createReservation(
-                space,
+        String backToBack = controller.createReservation(
+                space1,
                 date,
                 LocalTime.of(11, 0),
                 LocalTime.of(12, 0)
         );
 
-        String invalidResult = controller.createReservation(
-                space,
+        String endBeforeStart = controller.createReservation(
+                space1,
                 date,
                 LocalTime.of(2, 0),
                 LocalTime.of(1, 0)
         );
 
-        List<Reservation> finalReservations =
+        String equalTimes = controller.createReservation(
+                space1,
+                date,
+                LocalTime.of(1, 0),
+                LocalTime.of(1, 0)
+        );
+
+        String past = controller.createReservation(
+                space1,
+                pastDate,
+                LocalTime.of(10, 0),
+                LocalTime.of(11, 0)
+        );
+
+        String missing = controller.createReservation(
+                null,
+                date,
+                LocalTime.of(1, 0),
+                LocalTime.of(2, 0)
+        );
+
+        String differentSpace = controller.createReservation(
+                space2,
+                date,
+                LocalTime.of(10, 0),
+                LocalTime.of(11, 0)
+        );
+
+        String differentDate = controller.createReservation(
+                space1,
+                otherDate,
+                LocalTime.of(10, 0),
+                LocalTime.of(11, 0)
+        );
+
+        List<Reservation> savedReservations =
                 controller.getReservationsByDay("Library", date);
 
-        System.out.println("Valid reservation: " + validResult);
-        System.out.println("Reservations after valid creation: " + reservations.size());
-        System.out.println("Conflicting reservation: " + conflictResult);
-        System.out.println("Back-to-back reservation: " + backToBackResult);
-        System.out.println("Invalid reservation: " + invalidResult);
-        System.out.println("Final saved reservations: " + finalReservations.size());
+        System.out.println("Valid reservation: " + valid);
+        System.out.println("Overlapping reservation: " + overlap);
+        System.out.println("Back-to-back reservation: " + backToBack);
+        System.out.println("End before start: " + endBeforeStart);
+        System.out.println("Equal start and end: " + equalTimes);
+        System.out.println("Past reservation: " + past);
+        System.out.println("Missing information: " + missing);
+        System.out.println("Different space: " + differentSpace);
+        System.out.println("Different date: " + differentDate);
+        System.out.println("Saved Library reservations for date: "
+                + savedReservations.size());
     }
 }
