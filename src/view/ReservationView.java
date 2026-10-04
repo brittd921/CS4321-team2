@@ -1,0 +1,63 @@
+package view;
+
+import controller.ReservationController;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
+public class ReservationView {
+
+    private final ReservationController controller;
+
+    public ReservationView(ReservationController controller) {
+        this.controller = controller;
+    }
+
+    // US-5: Display reserved and available times differently
+    public void displayDailySchedule(
+            String spaceName,
+            LocalDate date
+    ) {
+
+        System.out.println(
+                "Daily Schedule for " + spaceName
+                        + " on " + date
+        );
+
+        System.out.println("--------------------------------");
+
+        LocalTime start = LocalTime.of(9, 0);
+        LocalTime endOfDay = LocalTime.of(17, 0);
+
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("h:mm a");
+
+        while (start.isBefore(endOfDay)) {
+
+            LocalTime end = start.plusHours(1);
+
+            boolean reserved =
+                    controller.isTimeReserved(
+                            spaceName,
+                            date,
+                            start,
+                            end
+                    );
+
+            String status = reserved
+                    ? "RESERVED"
+                    : "AVAILABLE";
+
+            System.out.println(
+                    start.format(formatter)
+                            + " - "
+                            + end.format(formatter)
+                            + " | "
+                            + status
+            );
+
+            start = end;
+        }
+    }
+}
