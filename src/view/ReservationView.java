@@ -1,11 +1,13 @@
 package view;
 
 import controller.ReservationController;
+import model.Reservation;
 import model.Space;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class ReservationView {
 
@@ -62,19 +64,56 @@ public class ReservationView {
         }
     }
 
+    // US-6: Create a reservation and display the result
     public void createReservation(
             Space space,
             LocalDate date,
             LocalTime startTime,
             LocalTime endTime
     ) {
-        String result = controller.createReservation(
-                space,
-                date,
-                startTime,
-                endTime
-        );
+
+        String result =
+                controller.createReservation(
+                        space,
+                        date,
+                        startTime,
+                        endTime
+                );
 
         System.out.println(result);
+    }
+
+    // US-7: Display all reservations
+    public void displayMyReservations() {
+
+        List<Reservation> reservations =
+                controller.getAllReservations();
+
+        if (reservations.isEmpty()) {
+            System.out.println("You have no reservations.");
+            return;
+        }
+
+        DateTimeFormatter dateFormatter =
+                DateTimeFormatter.ofPattern("MM/dd/yyyy");
+
+        DateTimeFormatter timeFormatter =
+                DateTimeFormatter.ofPattern("h:mm a");
+
+        System.out.println("My Reservations");
+        System.out.println("--------------------------------");
+
+        for (Reservation reservation : reservations) {
+
+            System.out.println(
+                    reservation.getSpace().getName()
+                            + " | "
+                            + reservation.getDate().format(dateFormatter)
+                            + " | "
+                            + reservation.getStartTime().format(timeFormatter)
+                            + " - "
+                            + reservation.getEndTime().format(timeFormatter)
+            );
+        }
     }
 }
