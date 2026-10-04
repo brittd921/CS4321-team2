@@ -60,6 +60,25 @@ public class ReservationController {
         );
     }
 
+    public boolean hasReservationConflict(
+            String spaceName,
+            LocalDate date,
+            LocalTime startTime,
+            LocalTime endTime
+    ) {
+        List<Reservation> reservations =
+                repository.findReservationsBySpaceAndDate(spaceName, date);
+
+        for (Reservation reservation : reservations) {
+            if (startTime.isBefore(reservation.getEndTime())
+                    && endTime.isAfter(reservation.getStartTime())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     // US-6: Validate reservation information
     public String validateReservation(
             Space space,
@@ -87,6 +106,14 @@ public class ReservationController {
 
         if (reservationStart.isBefore(LocalDateTime.now())) {
             return "Reservation date and time cannot be in the past.";
+        }
+        if (hasReservationConflict(
+                space.getName(),
+                date,
+                startTime,
+                endTime
+        )) {
+            return "Reservation conflicts with an existing reservation.";
         }
 
         return "VALID";
