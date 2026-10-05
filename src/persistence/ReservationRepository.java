@@ -73,4 +73,14 @@ public class ReservationRepository {
 
         return true;
     }
+
+    // US-9: Remove an existing reservation
+    public boolean removeReservation(Reservation reservation) {
+
+        if (reservation == null) {
+            return false;
+        }
+
+        return reservations.remove(reservation);
+    }
 }
