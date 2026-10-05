@@ -40,7 +40,7 @@ public class CancelReservationControllerTest {
         // Check reservations before cancellation
         List<Reservation> beforeCancel =
                 controller.getReservationsByDay(
-                        "Library",
+                        "Library" ,
                         date
                 );
 

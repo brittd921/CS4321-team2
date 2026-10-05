@@ -70,7 +70,7 @@ public class CancelReservationTest {
         controller.cancelReservation(reservation);
 
         boolean available = controller.isTimeAvailable(
-                "Library",
+                "Library" ,
                 targetDate,
                 LocalTime.of(9, 0),
                 LocalTime.of(10, 0)
