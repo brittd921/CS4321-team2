@@ -224,4 +224,20 @@ public class ReservationController {
 
         return "Reservation updated successfully.";
     }
+    // US-9: Cancel an existing reservation
+    public String cancelReservation(Reservation reservation) {
+
+        if (reservation == null) {
+            return "Reservation could not be found.";
+        }
+
+        boolean removed =
+                repository.removeReservation(reservation);
+
+        if (!removed) {
+            return "Reservation could not be found.";
+        }
+
+        return "Reservation canceled successfully.";
+    }
 }
