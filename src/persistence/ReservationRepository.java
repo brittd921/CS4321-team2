@@ -11,9 +11,25 @@ import java.util.List;
 public class ReservationRepository {
 
     private final List<Reservation> reservations = new ArrayList<>();
+    private final ReservationFilePersistence filePersistence;
+
+    public ReservationRepository() {
+        this.filePersistence = null;
+    }
+
+    public ReservationRepository(ReservationFilePersistence filePersistence) {
+        this.filePersistence = filePersistence;
+
+        if (filePersistence != null) {
+            reservations.addAll(
+                    filePersistence.loadReservations()
+            );
+        }
+    }
 
     public void addReservation(Reservation reservation) {
         reservations.add(reservation);
+        saveReservations();
     }
 
     // US-4: Find reservations for a selected space and date
@@ -50,6 +66,7 @@ public class ReservationRepository {
 
         return result;
     }
+
     public boolean updateReservation(
             Reservation reservation,
             LocalDate newDate,
@@ -62,14 +79,17 @@ public class ReservationRepository {
             return false;
         }
 
-        Reservation updatedReservation = new Reservation(
-                reservation.getSpace(),
-                newDate,
-                newStartTime,
-                newEndTime
-        );
+        Reservation updatedReservation =
+                new Reservation(
+                        reservation.getSpace(),
+                        newDate,
+                        newStartTime,
+                        newEndTime
+                );
 
         reservations.set(index, updatedReservation);
+
+        saveReservations();
 
         return true;
     }
@@ -81,7 +101,21 @@ public class ReservationRepository {
             return false;
         }
 
-        return reservations.remove(reservation);
+        boolean removed =
+                reservations.remove(reservation);
+
+        if (removed) {
+            saveReservations();
+        }
+
+        return removed;
     }
-    
+
+    // US-10: Save reservations when persistence is enabled
+    private void saveReservations() {
+
+        if (filePersistence != null) {
+            filePersistence.saveReservations(reservations);
+        }
+    }
 }
